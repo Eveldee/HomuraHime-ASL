@@ -34,36 +34,57 @@ init
             "ID"
         );
 
+        vars.Helper["isTransitioning"] = mono.Make<bool>(
+            "LevelManager",
+            "isTransitioning"
+        );
+
+        vars.Helper["nextLevel"] = mono.MakeString(
+            "LevelManager",
+            "NextWantToLoadLevel"
+        );
+
         // Allow setting the value to null to detect finished battles
         vars.Helper["battleId"].FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull;
 
         return true;
     });
 
-    // TODO Add missing battles to the list
-    // Battles list
+    // Subchapters list to split on subchapter start
+    vars.subchapters = new HashSet<string>()
+    {
+        // Mihare Shrine
+        "HubWorld_Main",
+
+        // Chapter 1
+        "Level_1_Area_1_Main"
+    };
+
+    // Battles list used to split on battles Start/End
     vars.battleIds = new HashSet<Tuple<int, string>>()
     {
-        // Chapter 1
-        Tuple.Create(0, "HUD_RankAndResult_Battle_L1Boss"),
-
-        // Chapter 3
-        Tuple.Create(2, "HUD_RankAndResult_Battle_L3B01"),
-        Tuple.Create(2, "HUD_RankAndResult_Battle_L3B02"),
-        Tuple.Create(2, "HUD_RankAndResult_Battle_L3C01")
+        // Final chapter
+        Tuple.Create(13, "BattleRoundDefulat"),
+        Tuple.Create(13, "HUD_RankAndResult_Battle_Final"),
     };
 
     // Logic variables
+    vars.visitedSubchapters = new HashSet<string>();
+
     vars.startedBattles = new HashSet<Tuple<int, string>>();
     vars.finishedBattles = new HashSet<Tuple<int, string>>();
 }
 
 split
 {
-    if (current.category != old.category || current.battleId != old.battleId)
+    // Split on subchapter change
+    if (current.nextLevel != old.nextLevel)
     {
-        print("Category: " + old.category + "->" + current.category);
-        print("BattleId: " + (old.battleId ?? "NULL") + "->" + (current.battleId ?? "NULL"));
+        // Only split if this is the first time we visit this subchapter to avoid double splitting
+        if (vars.subchapters.Contains(current.nextLevel) && vars.visitedSubchapters.Add(current.nextLevel))
+        {
+            return true;
+        }
     }
 
     // Split on battle start (current) and end (old)
@@ -87,45 +108,39 @@ split
     }
 }
 
-// start
-// {
-//     // Find new game start
-//     if (current.stageName != old.stageName || current.checkpointName != old.checkpointName)
-//     {
-//         if (current.stageName == "Stage Start" && current.checkpointName == "Savepoint Start-1")
-//         {
-//             vars.startScene = true;
-//         }
-//     }
+start
+{
+    if (current.nextLevel == "Level_0_Main")
+    {
+        return true;
+    }
+}
 
-//     // Wait for first cutscene to end (goes from isCutscenePlaying True -> False)
-//     if (vars.startScene && (old.isCutscenePlaying && !current.isCutscenePlaying))
-//     {
-//         return true;
-//     }
-// }
+isLoading
+{
+    return current.isTransitioning;
+}
 
-// isLoading
-// {
-//     return current.isLoadingScreen;
-// }
-
-// reset
-// {
-//     if (current.isTitleScreen && !old.isTitleScreen)
-//     {
-//         return true;
-//     }
-// }
+reset
+{
+    if (current.nextLevel == "StartScreen")
+    {
+        return true;
+    }
+}
 
 onStart
 {
+    vars.visitedSubchapters.Clear();
+
     vars.startedBattles.Clear();
     vars.finishedBattles.Clear();
 }
 
 onReset
 {
+    vars.visitedSubchapters.Clear();
+
     vars.startedBattles.Clear();
     vars.finishedBattles.Clear();
 }

@@ -6,15 +6,68 @@ startup
     // Will inject code into the asl in the background
     Assembly.Load(File.ReadAllBytes("Components/asl-help")).CreateInstance("Unity");
 
-    // Set the helper to load the scene manager, you probably want this
-    // (the helper is set at vars.Helper automagically)
-    // vars.Helper.LoadSceneManager = true;
-
-    // TODO
     // Add settings
-    // settings.Add("Stage 1");
-    // settings.Add("Stage 1_Savepoint 1-1", true, "Part 1", "Stage 1");
-    // settings.Add("Stage 1_Savepoint 1-2", true, "Part 2", "Stage 1");
+    settings.Add("Mihare Shrine");
+    settings.Add("HubWorld_Main", true, "Split on each shrine visit", "Mihare Shrine");
+
+    settings.Add("Chapter 1: The Skeleton Girl");
+    settings.Add("Level_1_Area_1_Main", true, "1. Adashino - Spiriting Away Border", "Chapter 1: The Skeleton Girl");
+    settings.Add("Level_1_Ikai_Part_1_Main", true, "2. Demonic Realm - Carcass Ravine", "Chapter 1: The Skeleton Girl");
+    settings.Add("Level1Boss_Main", true, "3. Agasa, Skeleton Girl", "Chapter 1: The Skeleton Girl");
+
+    settings.Add("Chapter 2: The Flower and Corpse Princess");
+    settings.Add("Level_2_Area_1_Main", true, "1. ??? - Hidden Path", "Chapter 2: The Flower and Corpse Princess");
+    settings.Add("Level_2_Area_3_Main", true, "2. Tanka Castle - Ninomaru Palace", "Chapter 2: The Flower and Corpse Princess");
+    settings.Add("Level_2_Area_5_Main", true, "3. Tanka Castle - Sannomaru Palace", "Chapter 2: The Flower and Corpse Princess");
+    settings.Add("Level_2_Area_6_Main", true, "4. Tanka Castle - Rakka Observatory", "Chapter 2: The Flower and Corpse Princess");
+    settings.Add("Level2Boss_Main", true, "5. Ling Ling, Flower and Corpse Princess", "Chapter 2: The Flower and Corpse Princess");
+
+    settings.Add("Chapter 3: The Holy Maiden of the Full Moon Order");
+    settings.Add("Level_3_Area_1_Main", true, "1. Chirakuin - Front Gates", "Chapter 3: The Holy Maiden of the Full Moon Order");
+    settings.Add("Level_3_Area_3_Main", true, "2. Chirakuin - Study", "Chapter 3: The Holy Maiden of the Full Moon Order");
+    settings.Add("Level_3_Area_5_Main", true, "3. Chirakuin - Confessional", "Chapter 3: The Holy Maiden of the Full Moon Order");
+    settings.Add("Level_3_Ikai_Part2_Main", true, "4. Demonic Realm - Twisted Utopia", "Chapter 3: The Holy Maiden of the Full Moon Order");
+    settings.Add("Level3Boss_Main", true, "5. Chirakuin, Holy Maiden of the Full Moon Order", "Chapter 3: The Holy Maiden of the Full Moon Order");
+
+    settings.Add("Chapter 4: The Twin Watchdogs");
+    settings.Add("Level_4_Area_1_Main", true, "1. Kemono Island - Inugami Hill", "Chapter 4: The Twin Watchdogs");
+    settings.Add("Level_4_Ikai_Part1_Main", true, "2. Demonic Realm - Twilight Demonic Capital", "Chapter 4: The Twin Watchdogs");
+    settings.Add("Level_4_Area_3_Main", true, "3. Inumachi 1st District - Riverside", "Chapter 4: The Twin Watchdogs");
+    settings.Add("Level_4_Ikai_Part2_Main", true, "4. Demonic Realm - Airship", "Chapter 4: The Twin Watchdogs");
+    settings.Add("Level_4_Area_4_Main", true, "5. Mikan Festival - Shiba Shrine Approach", "Chapter 4: The Twin Watchdogs");
+    settings.Add("Level_4_Boss", true, "6. Yumiko & Kumiko, Twin Watchdogs", "Chapter 4: The Twin Watchdogs");
+
+    settings.Add("Chapter 5: The Fallen Samurai");
+    settings.Add("Level_5_Area_1_Main", true, "1. Adashino - Firefly Bridges", "Chapter 5: The Fallen Samurai");
+    settings.Add("Level_5_Area_4_Main", true, "2. Memory - Break of Dawn", "Chapter 5: The Fallen Samurai");
+    settings.Add("Level_5_Area_5_Main", true, "3. Memory - Home", "Chapter 5: The Fallen Samurai");
+    settings.Add("Level_5_Boss", true, "4. Mamiya, Fallen Samurai", "Chapter 5: The Fallen Samurai");
+
+    settings.Add("Climax: The Choice");
+    settings.Add("Level_FinalP0_Jinguu_Main", true, "1. Jinguu", "Climax: The Choice");
+
+    settings.Add("Chapter 6: Where it All Began");
+    settings.Add("Level_FinalP1_L1_Ikai_Main", true, "1. Demonic Realm - Carcass Ravine", "Chapter 6: Where it All Began");
+    settings.Add("Level_FinalP1_L2_A5_Main", true, "2. Tanka Castle - Sannomaru Palace", "Chapter 6: Where it All Began");
+    settings.Add("Level_FinalP1_L2Boss_Main", true, "3. Reunion: Ling Ling", "Chapter 6: Where it All Began");
+
+    settings.Add("Chapter 7: The Brambled Path of Rebellion");
+    settings.Add("Level_FinalP2_L3_A5_Main", true, "1. Chirakuin: Confessional", "Chapter 7: The Brambled Path of Rebellion");
+    settings.Add("Level_FinalP2_L3Boss_Main", true, "2. Reunion: Nozomi", "Chapter 7: The Brambled Path of Rebellion");
+    settings.Add("Level_FinalP2_L4_A2_Main", true, "3. Inumachi 2nd District - Shopping District", "Chapter 7: The Brambled Path of Rebellion");
+    settings.Add("Level_FinalP2_L4Boss_Phase1_Main", true, "4. Reunion: Yumiko & Kumiko", "Chapter 7: The Brambled Path of Rebellion");
+
+    settings.Add("Chapter 8: The Future of Reunion");
+    settings.Add("Level_FinalP3_L5_Ikai_Main", true, "1. Demonic Realm - Snowy End", "Chapter 8: The Future of Reunion");
+    settings.Add("Level_FinalP3_L5_A2_Main", true, "2. Reunion: Agasa", "Chapter 8: The Future of Reunion");
+    settings.Add("Level_FinalP3_L5_A5_Main", true, "3. Memory - Home", "Chapter 8: The Future of Reunion");
+    settings.Add("Level_FinalP3_L5Boss_Main", true, "4. Reunion: Mamiya", "Chapter 8: The Future of Reunion");
+
+    settings.Add("Final: Desire");
+    settings.Add("Level_FinalP4_Passage_Main", true, "1. Jinguu - Pathway", "Final: Desire");
+    settings.Add("Level_FinalP4_Jinguu_Phase1_Main", true, "2. Admini, the Adjucator", "Final: Desire");
+    settings.Add("Level_FinalP4_Jinguu_Phase2_Main", true, "3. Admini, the Divine Punisher", "Final: Desire");
+    settings.Add("Level_FinalP4_Jinguu_Phase2_Main_End", true, "4. Admini, the Divine Punisher - Defeated", "Final: Desire");
 }
 
 init
@@ -53,9 +106,6 @@ init
     // Subchapters list to split on subchapter start
     vars.subchapters = new HashSet<string>()
     {
-        // Tutorial
-        // "Level_0_Main",
-
         // --- Chapter 1: The Skeleton Girl
         "Level_1_Area_1_Main", // Adashino - Spiriting Away Border
         "Level_1_Ikai_Part_1_Main", // Demonic Realm - Carcass Ravine
@@ -128,21 +178,22 @@ split
     if (current.nextLevel != old.nextLevel)
     {
         // Exception for Mihare Shrine (HubWorld_Main) as it is visited multiple times
-        if (current.nextLevel == "HubWorld_Main" && vars.visitedTransitionsToHub.Add(old.nextLevel))
+        if (current.nextLevel == "HubWorld_Main" && vars.visitedTransitionsToHub.Add(old.nextLevel) && settings["HubWorld_Main"])
         {
             return true;
         }
+
         // Only split if this is the first time we visit this subchapter to avoid double splitting
-        else if (vars.subchapters.Contains(current.nextLevel) && vars.visitedSubchapters.Add(current.nextLevel))
+        if (vars.subchapters.Contains(current.nextLevel) && vars.visitedSubchapters.Add(current.nextLevel) && settings[current.nextLevel])
         {
             return true;
         }
     }
 
-    // Split on battle last battle end (final boss)
+    // Split on battle last battle end (final boss), if enabled
     if (current.battleId != old.battleId && !vars.finalBattleDone)
     {
-        if (current.category == 13 && old.battleId == "HUD_RankAndResult_Battle_Final")
+        if (current.category == 13 && old.battleId == "HUD_RankAndResult_Battle_Final" && settings["Level_FinalP4_Jinguu_Phase2_Main_End"])
         {
             vars.finalBattleDone = true;
 

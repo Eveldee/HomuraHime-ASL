@@ -53,26 +53,73 @@ init
     // Subchapters list to split on subchapter start
     vars.subchapters = new HashSet<string>()
     {
-        // Mihare Shrine
-        "HubWorld_Main",
+        // Tutorial
+        // "Level_0_Main",
 
-        // Chapter 1
-        "Level_1_Area_1_Main"
-    };
+        // --- Chapter 1: The Skeleton Girl
+        "Level_1_Area_1_Main", // Adashino - Spiriting Away Border
+        "Level_1_Ikai_Part_1_Main", // Demonic Realm - Carcass Ravine
+        "Level1Boss_Main", // Agasa, Skeleton Girl
 
-    // Battles list used to split on battles Start/End
-    vars.battleIds = new HashSet<Tuple<int, string>>()
-    {
-        // Final chapter
-        Tuple.Create(13, "BattleRoundDefulat"),
-        Tuple.Create(13, "HUD_RankAndResult_Battle_Final"),
+        // --- Chapter 2: The Flower and Corpse Princess
+        "Level_2_Area_1_Main", // ??? - Hidden Path
+        "Level_2_Area_3_Main", // Tanka Castle - Ninomaru Palace
+        "Level_2_Area_5_Main", // Tanka Castle - Sannomaru Palace
+        "Level_2_Area_6_Main", // Tanka Castle - Rakka Observatory
+        "Level2Boss_Main", // Ling Ling, Flower and Corpse Princess
+
+        // --- Chapter 3: The Holy Maiden of the Full Moon Order
+        "Level_3_Area_1_Main", // Chirakuin - Front Gates
+        "Level_3_Area_3_Main", // Chirakuin - Study
+        "Level_3_Area_5_Main", // Chirakuin - Confessional
+        "Level_3_Ikai_Part2_Main", // Demonic Realm - Twisted Utopia
+        "Level3Boss_Main", // Chirakuin, Holy Maiden of the Full Moon Order
+
+        // --- Chapter 4: The Twin Watchdogs
+        "Level_4_Area_1_Main", // Kemono Island - Inugami Hill
+        "Level_4_Ikai_Part1_Main", // Demonic Realm - Twilight Demonic Capital
+        "Level_4_Area_3_Main", // Inumachi 1st District - Riverside
+        "Level_4_Ikai_Part2_Main", // Demonic Realm - Airship
+        "Level_4_Area_4_Main", // Mikan Festival - Shiba Shrine Approach
+        "Level_4_Boss", // Yumiko & Kumiko, Twin Watchdogs
+
+        // --- Chapter 5: The Fallen Samurai
+        "Level_5_Area_1_Main", // Adashino - Firefly Bridges
+        "Level_5_Area_4_Main", // Memory - Break of Dawn
+        "Level_5_Area_5_Main", // Memory - Home
+        "Level_5_Boss", // Mamiya, Fallen Samurai
+
+        // --- Climax: The Choice
+        "Level_FinalP0_Jinguu_Main", // Jinguu
+
+        // --- Chapter 6: Where it All Began
+        "Level_FinalP1_L1_Ikai_Main", // Demonic Realm - Carcass Ravine
+        "Level_FinalP1_L2_A5_Main", // Tanka Castle - Sannomaru Palace
+        "Level_FinalP1_L2Boss_Main", // Reunion: Ling Ling
+
+        // --- Chapter 7: The Brambled Path of Rebellion
+        "Level_FinalP2_L3_A5_Main", // Chirakuin: Confessional
+        "Level_FinalP2_L3Boss_Main", // Reunion: Nozomi
+        "Level_FinalP2_L4_A2_Main", // Inumachi 2nd District - Shopping District
+        "Level_FinalP2_L4Boss_Phase1_Main", // Reunion: Yumiko & Kumiko
+
+        // --- Chapter 8: The Future of Reunion
+        "Level_FinalP3_L5_Ikai_Main", // Demonic Realm - Snowy End
+        "Level_FinalP3_L5_A2_Main", // Reunion: Agasa
+        "Level_FinalP3_L5_A5_Main", // Memory - Home
+        "Level_FinalP3_L5Boss_Main", // Reunion: Mamiya
+
+        // --- Final: Desire
+        "Level_FinalP4_Passage_Main", // Jinguu - Pathway
+        "Level_FinalP4_Jinguu_Phase1_Main", // Admini, the Adjucator
+        "Level_FinalP4_Jinguu_Phase2_Main" // Admini, the Divine Punisher
     };
 
     // Logic variables
     vars.visitedSubchapters = new HashSet<string>();
+    vars.visitedTransitionsToHub = new HashSet<string>();
 
-    vars.startedBattles = new HashSet<Tuple<int, string>>();
-    vars.finishedBattles = new HashSet<Tuple<int, string>>();
+    vars.finalBattleDone = false;
 }
 
 split
@@ -80,29 +127,25 @@ split
     // Split on subchapter change
     if (current.nextLevel != old.nextLevel)
     {
+        // Exception for Mihare Shrine (HubWorld_Main) as it is visited multiple times
+        if (current.nextLevel == "HubWorld_Main" && vars.visitedTransitionsToHub.Add(old.nextLevel))
+        {
+            return true;
+        }
         // Only split if this is the first time we visit this subchapter to avoid double splitting
-        if (vars.subchapters.Contains(current.nextLevel) && vars.visitedSubchapters.Add(current.nextLevel))
+        else if (vars.subchapters.Contains(current.nextLevel) && vars.visitedSubchapters.Add(current.nextLevel))
         {
             return true;
         }
     }
 
-    // Split on battle start (current) and end (old)
-    if (current.battleId != old.battleId)
+    // Split on battle last battle end (final boss)
+    if (current.battleId != old.battleId && !vars.finalBattleDone)
     {
-        // Split on battle start
-        var currentPair = Tuple.Create(current.category, (string)current.battleId);
-
-        if (vars.battleIds.Contains(currentPair) && vars.startedBattles.Add(currentPair))
+        if (current.category == 13 && old.battleId == "HUD_RankAndResult_Battle_Final")
         {
-            return true;
-        }
+            vars.finalBattleDone = true;
 
-        // Split on battle end
-        var oldPair = Tuple.Create(current.category, (string)old.battleId);
-
-        if (vars.battleIds.Contains(oldPair) && vars.finishedBattles.Add(oldPair))
-        {
             return true;
         }
     }
@@ -123,7 +166,7 @@ isLoading
 
 reset
 {
-    if (current.nextLevel == "StartScreen")
+    if (current.nextLevel != old.nextLevel && current.nextLevel == "StartScreen")
     {
         return true;
     }
@@ -132,15 +175,15 @@ reset
 onStart
 {
     vars.visitedSubchapters.Clear();
+    vars.visitedTransitionsToHub.Clear();
 
-    vars.startedBattles.Clear();
-    vars.finishedBattles.Clear();
+    vars.finalBattleDone = false;
 }
 
 onReset
 {
     vars.visitedSubchapters.Clear();
+    vars.visitedTransitionsToHub.Clear();
 
-    vars.startedBattles.Clear();
-    vars.finishedBattles.Clear();
+    vars.finalBattleDone = false;
 }
